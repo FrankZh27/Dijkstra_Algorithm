@@ -107,24 +107,28 @@ public class Dijkstra_main {
 	}
 	
 	
-	public static int dijkstra_fiheap(Vertex[] V, int i, int j) {
+	public static double dijkstra_fiheap(Vertex[] V, int s, int t) {
 		FibonacciHeap fh = new FibonacciHeap();
-		HashMap<String, Node> map= new HashMap<String, Node>();
+		HashMap<String, Vertex> map= new HashMap<String, Vertex>();
 		for (int k = 0; k < V.length; k++){
-			if (k == i){
-				Node temp = new Node(0);
-				map.put(V[k].id, temp);
-				fh.insert(temp, 0);
+			if (k == s){
+				Node node = new Node(V[k].id, 0);
+				map.put(V[k].id, V[k]);
+				fh.insert(node, 0);
 			}
 			else{
-				Node temp = new Node(Integer.MAX_VALUE);
-				map.put(V[k].id, temp);
-				fh.insert(temp, Integer.MAX_VALUE);
+				Node node = new Node(V[k].id, Integer.MAX_VALUE);
+				map.put(V[k].id, V[k]);
+				fh.insert(node, Integer.MAX_VALUE);
 			}
 		}
 		
 		while (!fh.isEmpty()){
-			Node temp = fh.min();
+			Node node = fh.min();
+			if (node.getId() == V[t].id){
+				return node.getKey();
+			}
+			Vertex newId = map.get(node.getId());
 			
 		}
 		
