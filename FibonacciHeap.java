@@ -654,10 +654,11 @@ public class FibonacciHeap {
          *
          * @param key initial key for node
          */
-        public Node( String m_id, double key ) {
+        public Node( String id, double key ) {
             m_right     = this;
             m_left      = this;
             m_key       = key;
+            m_id        = id;
         }
 
         /**

@@ -56,7 +56,8 @@ public class Dijkstra_main {
 	    	return;
 	    }
 	    long startTime = System.currentTimeMillis();
-	    int result = dijkstra_pq(V, i, j);
+	    // int result = dijkstra_pq(V, i, j);
+	    double result = dijkstra_fiheap(V, i, j);
 	    long endTime   = System.currentTimeMillis();
 	    long totalTime = endTime - startTime;
 	    System.out.println("Running time is "+totalTime+"ms");
@@ -109,26 +110,43 @@ public class Dijkstra_main {
 	
 	public static double dijkstra_fiheap(Vertex[] V, int s, int t) {
 		FibonacciHeap fh = new FibonacciHeap();
-		HashMap<String, Vertex> map= new HashMap<String, Vertex>();
+		HashMap<String, Vertex> map_V= new HashMap<String, Vertex>();
+		HashMap<String, Double> dist = new HashMap<String, Double>();
+		HashMap<String, Node> map_N = new HashMap<String, Node>();
 		for (int k = 0; k < V.length; k++){
 			if (k == s){
 				Node node = new Node(V[k].id, 0);
-				map.put(V[k].id, V[k]);
+				map_V.put(V[k].id, V[k]);
+				dist.put(V[k].id, 0.0);
+				map_N.put(V[k].id, node);
 				fh.insert(node, 0);
 			}
 			else{
 				Node node = new Node(V[k].id, Integer.MAX_VALUE);
-				map.put(V[k].id, V[k]);
+				map_V.put(V[k].id, V[k]);
+				dist.put(V[k].id, Integer.MAX_VALUE*1.0);
+				map_N.put(V[k].id, node);
 				fh.insert(node, Integer.MAX_VALUE);
 			}
 		}
 		
 		while (!fh.isEmpty()){
-			Node node = fh.min();
+			Node node = fh.removeMin();
+			System.out.println(1);
+			String str = node.getId(); 
 			if (node.getId() == V[t].id){
 				return node.getKey();
 			}
-			Vertex newId = map.get(node.getId());
+			Vertex curr_V = map_V.get(node.getId());
+			for (int k = 0; k < curr_V.nb.size(); k++){
+				Edge curr_E = curr_V.nb.get(k);
+				double newDist = dist.get(curr_V.id) + curr_E.weight;
+				if (dist.get(curr_E.endPoint) > newDist){
+					dist.put(curr_E.endPoint, newDist);
+					Node temp = map_N.get(curr_E.endPoint);
+					fh.decreaseKey(temp, newDist);
+				}
+			}
 			
 		}
 		
