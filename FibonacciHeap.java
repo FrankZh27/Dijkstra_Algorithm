@@ -623,6 +623,7 @@ public class FibonacciHeap {
      * @author Nathan Fiedler
      */
     public static class Node {
+    	String m_id;
         /** first child node */
         Node m_child;
 
@@ -653,7 +654,7 @@ public class FibonacciHeap {
          *
          * @param key initial key for node
          */
-        public Node( double key ) {
+        public Node( String m_id, double key ) {
             m_right     = this;
             m_left      = this;
             m_key       = key;
@@ -664,8 +665,11 @@ public class FibonacciHeap {
          *
          * @return the key
          */
-        public final double getKey(  ) {
+        public final double getKey() {
             return m_key;
+        }
+        public final String getId(){
+        	return m_id;
         }
 
 
