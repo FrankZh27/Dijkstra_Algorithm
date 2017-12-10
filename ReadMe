@@ -1,1 +1,3 @@
 Three implementations of Dijkstra Algorithm in three different kinds of heaps.
+All the source code goes into src folder
+All the compiled bytecode goes into bin folder
