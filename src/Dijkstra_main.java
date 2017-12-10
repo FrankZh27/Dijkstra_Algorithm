@@ -180,7 +180,9 @@ public class Dijkstra_main {
 	
 	public static int dijkstra_fiheap(Vertex[] V, int i, int j) {
 		int size = (int) (Math.ceil(1.44*(Math.log(V.length)/(Math.log(2.0))))); 
+		//System.out.println("size =   "+size);
 		FH f = new FH(size);
+
 		
 		Map<String, newNode> map = new HashMap<String, newNode>();
 		Map<newNode, Vertex> verMap = new HashMap<>();
@@ -190,6 +192,7 @@ public class Dijkstra_main {
 				map.put(V[k].id, cur);
 				verMap.put(cur, V[k]);
 				f.insert(cur);
+				
 			}
 			else {
 				newNode cur = new newNode(Integer.MAX_VALUE, V[k].id);
@@ -198,8 +201,11 @@ public class Dijkstra_main {
 				f.insert(cur);
 			}
 		}
-		while (f.allRoot != null) {
+		while (f.allRoot.length > 0) {
 			newNode temp = f.deletMin();
+			if (temp.key == Integer.MAX_VALUE) {
+				return Integer.MAX_VALUE;
+			}
 			if (temp.id.equals(V[j].id)) {
 				return temp.key;
 			}
