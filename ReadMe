@@ -1,3 +1,7 @@
 Three implementations of Dijkstra Algorithm in three different kinds of heaps.
 All the source code goes into src folder
 All the compiled bytecode goes into bin folder
+
+To run the code:
+1. You can directly download the input_edges.txt and input_vertexs.txt files and run the main class in Dijkstra_main.java;
+2. You can run WriteFile.java first to randomly create a graph and then run the main class in Dijkstra_main.java.
