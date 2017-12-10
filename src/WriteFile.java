@@ -8,7 +8,7 @@ public class WriteFile {
 	public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException {
 		// TODO Auto-generated method stub
 		String out = "";
-		int length = 1000;
+		int length = 50000;
 		String[] input = new String[length];
 		for (int i = 0; i < length; i++) {
 			input[i] = "A" + i;

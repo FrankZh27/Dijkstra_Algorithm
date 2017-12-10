@@ -42,8 +42,8 @@ public class Dijkstra_main {
 	    
 	    
 	    
-	    String start = "A";
-	    String end = "G";
+	    String start = "A3884";
+	    String end = "A234";
 	    int i = findIndex(V, start);
 	    int j = findIndex(V, end);
 	    if (i == -1 || j == -1) {
@@ -51,7 +51,8 @@ public class Dijkstra_main {
 	    	return;
 	    }
 	    long startTime = System.nanoTime();
-	    int result = dijkstra_pq(V, i, j);
+	    //int result = dijkstra_pq(V, i, j);
+	    int result = 0;
 	    long endTime   = System.nanoTime();
 	    long totalTime = endTime - startTime;
 	    System.out.println("Running time is "+totalTime+"ns");
@@ -61,8 +62,6 @@ public class Dijkstra_main {
 	    else System.out.println("Shortest path length: "+result);
 	    
 	    
-	    System.out.println();
-	    System.out.println();
 	    System.out.println();
 	    
 	    startTime = System.nanoTime();
@@ -77,8 +76,6 @@ public class Dijkstra_main {
 	    
 	    
 	    
-	    System.out.println();
-	    System.out.println();
 	    System.out.println();
 	    
 	    startTime = System.nanoTime();
@@ -108,6 +105,10 @@ public class Dijkstra_main {
 		}
 		while (!pq.isEmpty()) {
 			pair temp = pq.poll();
+			
+			if (temp.distance == Integer.MAX_VALUE){
+				return Integer.MAX_VALUE;
+			}
 			if (temp.endPoint.id.equals(V[j].id)) {
 				return temp.distance;
 			}
@@ -134,8 +135,8 @@ public class Dijkstra_main {
 	
 	public static int dijkstra_rankheap(Vertex[] V, int i, int j) {
 		
-		int size = (int) (Math.ceil(1.44*(Math.log(V.length)/(Math.log(2.0)))));  // convert to logn length
-		
+		int size = (int) (Math.ceil(3*(Math.log(V.length)/(Math.log(2.0)))));  // convert to logn length
+		// System.out.println(size);
 		RankPairingHeap rh = new RankPairingHeap(size);
 		Map<String, PairNode> map = new HashMap<String, PairNode>();
 		Map<PairNode, Vertex> verMap = new HashMap<>();
@@ -156,6 +157,9 @@ public class Dijkstra_main {
 		while (rh.rootList != null) {
 			// newNode temp = f.deletMin();
 			PairNode temp = rh.deleteMin();
+			if (temp.getKey() == Integer.MAX_VALUE){
+				return Integer.MAX_VALUE;
+			}
 			if (temp.getId().equals(V[j].id)) {
 				return temp.getKey();
 			}
@@ -226,6 +230,7 @@ public class Dijkstra_main {
 		}
 		return 0;
 	}
+	
 	
 	
 	

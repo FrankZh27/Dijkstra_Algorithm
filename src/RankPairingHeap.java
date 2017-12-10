@@ -48,7 +48,12 @@ public class RankPairingHeap{
 			newRoot = rightRoot;
 			rightRoot = newRoot.rightChild;
 		}
-		// deal with the last right subtree
+		// deal with the last right subtree's ptr
+		if (newRoot.parent != null){              // no while loop runs, directly run this
+			newRoot.parent.leftChild = null;
+			newRoot.parent = null;
+		}
+		// see if the newRoot node is a single node
 		if (newRoot.leftChild == null){
 			newRoot.setRank(0);
 			insert(newRoot);
@@ -57,6 +62,8 @@ public class RankPairingHeap{
 			newRoot.setRank(newRoot.leftChild.getRank() + 1);
 			insert(newRoot);
 		}
+		
+		
 		return node;
 	}
 
@@ -66,44 +73,86 @@ public class RankPairingHeap{
 		if (node.parent == null){                                  // The node we want to decrease is in the rootList
 			return;
 		}
-		PairNode rightRoot = node.parent;
+		// PairNode rightRoot = node.parent;
+		PairNode parentR = node.parent;
 // Be carefull of the ptrs!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		if (node.leftChild == null && node.rightChild == null){
-			node.parent = null;
-			rightRoot.leftChild = null;
-			preserveRank(rightRoot);
-			node.setRank(0);
-			insert(node);
-			return;
-		}
+		if (parentR.leftChild == node){
+			if (node.leftChild == null && node.rightChild == null){
+				node.parent = null;
+				parentR.leftChild = null;
+				preserveRank(parentR);
+				node.setRank(0);
+				insert(node);
+				return;
+			}
 
-		if (node.leftChild == null){
+			if (node.leftChild == null){
+				node.parent = null;
+				parentR.leftChild = node.rightChild;
+				node.rightChild = null;
+				parentR.leftChild.parent = parentR;
+				preserveRank(parentR);
+				node.setRank(0);
+				insert(node);
+				return;
+
+			}
+			if (node.rightChild == null){
+				node.parent = null;                             // Deal with ptr
+				parentR.leftChild = null;
+				preserveRank(parentR);
+				node.setRank(node.leftChild.getRank() + 1);
+				insert(node);
+				return;
+			}
 			node.parent = null;
-			rightRoot.leftChild = node.rightChild;
+			parentR.leftChild = node.rightChild;
 			node.rightChild = null;
-			rightRoot.leftChild.parent = rightRoot;
-			preserveRank(rightRoot);
-			node.setRank(0);
-			insert(node);
-			return;
-
-		}
-		if (node.rightChild == null){
-			node.parent = null;                             // Deal with ptr
-			rightRoot.leftChild = null;
-			preserveRank(rightRoot);
+			parentR.leftChild.parent = parentR;
+			preserveRank(parentR);
 			node.setRank(node.leftChild.getRank() + 1);
 			insert(node);
 			return;
 		}
-		node.parent = null;
-		rightRoot.leftChild = node.rightChild;
-		node.rightChild = null;
-		rightRoot.leftChild.parent = rightRoot;
-		preserveRank(rightRoot);
-		node.setRank(node.leftChild.getRank() + 1);
-		insert(node);
-		return;
+		else{
+			if (node.leftChild == null && node.rightChild == null){
+				node.parent = null;
+				parentR.rightChild = null;
+				preserveRank(parentR);
+				node.setRank(0);
+				insert(node);
+				return;
+			}
+
+			if (node.leftChild == null){
+				node.parent = null;
+				parentR.rightChild = node.rightChild;
+				node.rightChild = null;
+				parentR.rightChild.parent = parentR;
+				preserveRank(parentR);
+				node.setRank(0);
+				insert(node);
+				return;
+
+			}
+			if (node.rightChild == null){
+				node.parent = null;                             // Deal with ptr
+				parentR.rightChild = null;
+				preserveRank(parentR);
+				node.setRank(node.leftChild.getRank() + 1);
+				insert(node);
+				return;
+			}
+			node.parent = null;
+			parentR.rightChild = node.rightChild;
+			node.rightChild = null;
+			parentR.rightChild.parent = parentR;
+			preserveRank(parentR);
+			node.setRank(node.leftChild.getRank() + 1);
+			insert(node);
+			return;
+		}
+		
 	}
 
 	
@@ -116,7 +165,7 @@ public class RankPairingHeap{
 				continue;
 			}
 			else {
-				if (rootList[i].getKey() < minValue){
+				if (rootList[i].getKey() <= minValue){
 					minNode = rootList[i];
 					minValue = rootList[i].getKey();
 				}
@@ -157,7 +206,7 @@ public class RankPairingHeap{
 	}
 
 	public void preserveRank(PairNode node){
-		if (node.parent == null){
+		if (node.parent == null){                          // If it is a root node
 			rootList[node.getRank()] = null;
 			if (node.leftChild == null){
 				node.setRank(0);
@@ -166,6 +215,11 @@ public class RankPairingHeap{
 				node.setRank(node.leftChild.getRank() + 1);
 			}
 			insert(node);
+			return;
+		}
+		if (node.leftChild == null && node.rightChild == null){
+			node.setRank(0);
+			preserveRank(node.parent);
 			return;
 		}
 
@@ -185,7 +239,8 @@ public class RankPairingHeap{
 			return;
 		}
 		else {
-			node.setRank(node.leftChild.getRank());
+			int r = (node.leftChild.getRank() > node.rightChild.getRank()) ? node.leftChild.getRank() : node.rightChild.getRank();
+			node.setRank(r);
 			preserveRank(node.parent);
 			return;
 		}
